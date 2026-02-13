@@ -7,7 +7,7 @@ const SearchPanel = () => {
         <div className="flex flex-row items-center justify-center">
             <button
             >
-                test
+                Hae
             </button>
             <input
                 value={text}

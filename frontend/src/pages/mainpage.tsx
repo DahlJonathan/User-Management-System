@@ -33,8 +33,8 @@ export default function MainPage() {
             <div className="flex flex-col items-center justify-center">
                 <div className="text-3xl mt-10">
                     {users.map((user) => (
-                        <div key={user.id} className="p-2 border">
-                            <p>{user.name} - {user.email}</p>
+                        <div key={user.id} className="p-2 border ">
+                            <p>{user.name} - {user.email} - #{user.id}</p>
                         </div>
                     ))}
                     {message}
