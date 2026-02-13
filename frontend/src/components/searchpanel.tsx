@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
+import Button from './button.tsx'
 
-const SearchPanel = () => {
+interface SearchPanelProps {
+    onFetch: () => void;
+}
+
+const SearchPanel = ({ onFetch }: SearchPanelProps) => {
     const [text, setText] = useState("");
 
     return (
         <div className="flex flex-row items-center justify-center">
-            <button
+            <Button
+                variant="blue"
+                onClick={onFetch}
             >
                 Hae
-            </button>
+            </Button>
             <input
                 value={text}
                 onChange={(e) => setText(e.target.value)}
