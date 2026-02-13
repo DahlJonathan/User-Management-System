@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import SearchPanel from '../components/searchpanel.tsx';
 import { FetchData } from '../utility/api.ts'
+import type { User } from '../types/user.ts';
 
-type User = {
-    id: number;
-    name: string;
-    email: string;
-};
 
 export default function MainPage() {
     const [message, setMessage] = useState<string>();
     const [users, setUsers] = useState<User[]>([]);
 
-    const fetchUsers = async () => {
-        FetchData<User[]>("/users")
-            .then(setUsers)
-            .catch(err => setMessage(err.message));
+    const fetchUsers = async (mode: string = "All", text: string = "") => {
+        let url = ""
+
+        if (mode === "All") {
+            url = "/users";
+
+            try {
+                const data = await FetchData<User[]>(url)
+                setUsers(data as User[])
+            } catch (err: any) {
+                setUsers([]);
+                setMessage(err.message);
+            }
+        }
     }
 
     return (
