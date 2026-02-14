@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SearchPanel from '../components/searchpanel.tsx';
 import { FetchData } from '../utility/api.ts'
 import type { User } from '../types/user.ts';
+import SearchResult from "../components/searchresult.tsx"
 
 
 export default function MainPage() {
@@ -21,6 +22,9 @@ export default function MainPage() {
         }
         if (mode === "Id") {
             url = `/users?id=${text}`;
+        }
+        if (mode === "Name") {
+            url = `/users?name=${text}`
         }
 
         try {
@@ -43,18 +47,7 @@ export default function MainPage() {
     return (
         <div>
             <SearchPanel onFetch={fetchUsers} />
-            <div className="flex flex-col items-center justify-center">
-                {search && (
-                    <div className="text-3xl mt-10">
-                        {users.map((user, index) => (
-                            <div key={user.id ?? index} className="p-2 border">
-                                <p>{user.name} - {user.email} - #{user.id}</p>
-                            </div>
-                        ))}
-                        {message}
-                    </div>
-                )}
-            </div>
+            <SearchResult message={message} search={search} users={users} />
         </div>
     );
 }

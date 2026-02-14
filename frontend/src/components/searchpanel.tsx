@@ -44,7 +44,7 @@ const SearchPanel = ({ onFetch }: SearchPanelProps) => {
                         <Button
                             type="button"
                             variant="gray"
-                            onClick={() => { selectedSearch("All") }}
+                            onClick={() => { selectedSearch("All"), setSearchText("") }}
                             className="w-full"
                         >
                             All
@@ -52,7 +52,7 @@ const SearchPanel = ({ onFetch }: SearchPanelProps) => {
                         <Button
                             type="button"
                             variant="gray"
-                            onClick={() => { selectedSearch("Name") }}
+                            onClick={() => { selectedSearch("Name"), setSearchText("") }}
                             className="w-full"
                         >
                             Name
@@ -60,7 +60,7 @@ const SearchPanel = ({ onFetch }: SearchPanelProps) => {
                         <Button
                             type="button"
                             variant="gray"
-                            onClick={() => { selectedSearch("Id") }}
+                            onClick={() => { selectedSearch("Id"), setSearchText("") }}
                             className="w-full"
                         >
                             Id

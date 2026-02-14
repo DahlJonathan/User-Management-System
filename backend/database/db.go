@@ -70,3 +70,29 @@ func GetUserId(id string) (User, error) {
 	}
 	return u, nil
 }
+
+func GetUserName(name string) ([]User, error) {
+
+	rows, err := DB.Query("SELECT id, name, email FROM users WHERE name LIKE ?", "%"+name+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []User
+
+	for rows.Next() {
+		var u User
+		if err := rows.Scan(&u.ID, &u.Name, &u.Email); err != nil {
+			return nil, err
+		}
+		users = append(users, u)
+	}
+
+	if len(users) == 0 {
+		return nil, fmt.Errorf("no_user_found")
+	}
+
+	return users, nil
+
+}
