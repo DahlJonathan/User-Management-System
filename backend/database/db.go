@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "modernc.org/sqlite"
@@ -54,4 +55,18 @@ func GetUser() ([]User, error) {
 		users = append(users, u)
 	}
 	return users, nil
+}
+
+func GetUserId(id string) (User, error) {
+	var u User
+
+	err := DB.QueryRow("SELECT id, name, email FROM users WHERE id = ?", id).Scan(&u.ID, &u.Name, &u.Email)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return u, fmt.Errorf("no_user_found")
+		}
+		return u, err
+	}
+	return u, nil
 }

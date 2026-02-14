@@ -12,6 +12,25 @@ func HandleGetUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+
+	id := r.URL.Query().Get("id")
+
+	if id != "" {
+		user, err := database.GetUserId(id)
+		if err != nil {
+			if err.Error() == "no_user_found" {
+				w.WriteHeader(http.StatusNotFound)
+				json.NewEncoder(w).Encode(map[string]string{"message": "no user found"})
+				return
+			}
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(user)
+		return
+	}
+
 	// Get data from database
 	users, err := database.GetUser()
 	if err != nil {

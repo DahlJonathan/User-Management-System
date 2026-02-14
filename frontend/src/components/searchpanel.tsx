@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import Button from './button.tsx'
-import type { User } from '../types/user.ts';
-import { FetchData } from '../utility/api.ts'
 
 interface SearchPanelProps {
     onFetch: (mode: Search, text: string) => void;
 }
 
 type Search = "All" | "Name" | "Id";
-
 
 const SearchPanel = ({ onFetch }: SearchPanelProps) => {
     const [searchText, setSearchText] = useState("");
@@ -75,7 +72,8 @@ const SearchPanel = ({ onFetch }: SearchPanelProps) => {
             <input
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                className="border rounded p-2"
+                className={`border rounded p-2 transition-colors ${mode === "All" ? "bg-gray-200 cursor-not-allowed opacity-50" : "bg-white"
+                    }`}
                 placeholder={placeholders[mode]}
                 disabled={mode === "All"}
             >
