@@ -33,7 +33,7 @@ func HandleGetUsers(w http.ResponseWriter, r *http.Request) {
 
 	name := r.URL.Query().Get("name")
 	if name != "" {
-		users, err := database.GetUserName(name) 
+		users, err := database.GetUserName(name)
 		if err != nil {
 			if err.Error() == "no_user_found" {
 				w.WriteHeader(http.StatusNotFound)
@@ -44,11 +44,11 @@ func HandleGetUsers(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(users) 
+		json.NewEncoder(w).Encode(users)
 		return
 	}
 
-	// Get data from database
+	// Get all users from database
 	users, err := database.GetUser()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

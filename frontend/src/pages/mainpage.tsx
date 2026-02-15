@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import SearchPanel from '../components/searchpanel.tsx';
 import { FetchData } from '../utility/api.ts'
 import type { User } from '../types/user.ts';

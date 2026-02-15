@@ -6,15 +6,10 @@ import (
 	"log"
 
 	_ "modernc.org/sqlite"
+	"user-management-backend/types"
 )
 
 var DB *sql.DB
-
-type User struct {
-	ID    int    `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
-}
 
 func InitDb() {
 	var err error
@@ -39,16 +34,17 @@ func CreateTable() {
 	}
 }
 
-func GetUser() ([]User, error) {
+func GetUser() ([]models.User, error) {
+
 	rows, err := DB.Query("SELECT id, name, email FROM users")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var users []User
+	var users []models.User
 	for rows.Next() {
-		var u User
+		var u models.User
 		if err := rows.Scan(&u.ID, &u.Name, &u.Email); err != nil {
 			return nil, err
 		}
@@ -57,8 +53,8 @@ func GetUser() ([]User, error) {
 	return users, nil
 }
 
-func GetUserId(id string) (User, error) {
-	var u User
+func GetUserId(id string) (models.User, error) {
+	var u models.User
 
 	err := DB.QueryRow("SELECT id, name, email FROM users WHERE id = ?", id).Scan(&u.ID, &u.Name, &u.Email)
 
@@ -71,23 +67,7 @@ func GetUserId(id string) (User, error) {
 	return u, nil
 }
 
-func DeleteUserByID(id string) error {
-	// Using Exec becouse delete is not outputting anything
-	result, err := DB.Exec("DELETE FROM users WHERE id = ?", id)
-	if err != nil {
-		return err
-	}
-
-	// Checking if it deleted
-	rowsAffected, _ := result.RowsAffected()
-	if rowsAffected == 0 {
-		return fmt.Errorf("no_user_found")
-	}
-
-	return nil
-}
-
-func GetUserName(name string) ([]User, error) {
+func GetUserName(name string) ([]models.User, error) {
 
 	rows, err := DB.Query("SELECT id, name, email FROM users WHERE name LIKE ?", "%"+name+"%")
 	if err != nil {
@@ -95,10 +75,10 @@ func GetUserName(name string) ([]User, error) {
 	}
 	defer rows.Close()
 
-	var users []User
+	var users []models.User
 
 	for rows.Next() {
-		var u User
+		var u models.User
 		if err := rows.Scan(&u.ID, &u.Name, &u.Email); err != nil {
 			return nil, err
 		}
@@ -111,4 +91,24 @@ func GetUserName(name string) ([]User, error) {
 
 	return users, nil
 
+}
+
+func DeleteUserByID(id string) error {
+	// Using Exec becouse delete is not outputting anything
+	result, err := DB.Exec("DELETE FROM users WHERE id = ?", id)
+	if err != nil {
+		return err
+	}
+
+	// Checking if its deleted
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
+		return fmt.Errorf("no_user_found")
+	}
+	return nil
+}
+
+func EditUser(id string, name string, email string) error {
+	_, err := DB.Exec("UPDATE users SET name = ?, email = ? WHERE id = ?,", name, email, id)
+	return err
 }

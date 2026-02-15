@@ -7,7 +7,7 @@ import (
 )
 
 func HandleDeleteUser(w http.ResponseWriter, r *http.Request) {
-	// Only allow DELETE requests
+	// Only allow DELETE 
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return

@@ -18,6 +18,8 @@ func main() {
 
 	mux.HandleFunc("DELETE /users/{id}", api.HandleDeleteUser)
 
+	mux.HandleFunc("PUT /users/{id}", api.HandleEditUser)
+
 	c := cors.SetupCors()
 	handler := c.Handler(mux)
 
@@ -26,5 +28,5 @@ func main() {
 }
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "möi")
+	fmt.Fprintf(w, "Backend is running")
 }

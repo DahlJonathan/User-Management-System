@@ -1,6 +1,7 @@
-import type { User } from '../types/user.ts'
-import Button from './button.tsx'
-import { FetchData } from '../utility/api.ts'
+import type { User } from '../types/user.ts';
+import Button from './button.tsx';
+import { FetchData } from '../utility/api.ts';
+import { useState } from 'react';
 
 interface ResultProps {
     users: User[];
@@ -11,18 +12,39 @@ interface ResultProps {
 }
 
 const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultProps) => {
+    // Pidetään kirjaa siitä, mitä ID:tä muokataan
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editData, setEditData] = useState({ name: "", email: "" });
 
     const DeleteUser = async (id: number) => {
         setMessage("");
         try {
-            await FetchData<User>(`/users/${id}`, {
-                method: 'DELETE'
-            });
+            await FetchData<User>(`/users/${id}`, { method: 'DELETE' });
             setUsers((prev) => prev.filter((u) => u.id !== id));
             setMessage("Käyttäjä poistettu");
         } catch (err: any) {
             console.error(err.message);
-            setMessage?.(err.message)
+            setMessage(err.message);
+        }
+    }
+
+    const EditUser = async (id: number) => {
+        setMessage("");
+        try {
+            await FetchData<User>(`/users/${id}`, {
+                method: 'PUT',
+                data: editData
+            });
+            setUsers((prevUsers) =>
+                prevUsers.map((u) =>
+                    u.id === id ? { ...u, name: editData.name, email: editData.email } : u
+                )
+            );
+            setEditingId(null);
+            setMessage("Käyttäjä päivitetty onnistuneesti!");
+        } catch (err: any) {
+            console.error(err.message);
+            setMessage(err.message);
         }
     }
 
@@ -33,6 +55,7 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
                     {message}
                 </p>
             )}
+
             {search && (
                 <div className="mt-5 w-full max-w-md">
                     {users.map((user, index) => (
@@ -40,30 +63,60 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
                             key={user.id ?? index}
                             className="flex items-center p-1 border mb-1 bg-white shadow-sm rounded gap-4"
                         >
-                            <p className="text-xl font-semibold flex-1 text-left">
-                                {user.name}
-                            </p>
-                            <p className="text-xl text-black flex-1 text-center">
-                                {user.email}
-                            </p>
-                            <div className="flex items-center gap-1 justify-end flex-1">
-                                <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
-                                    #{user.id}
-                                </span>
-                                <Button
-                                    type="button"
-                                    variant="yellow"
-                                >
-                                    Edit
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="red"
-                                    onClick={() => DeleteUser(user.id)}
-                                >
-                                    Delete
-                                </Button>
-                            </div>
+                            {editingId === user.id ? (
+                                <div className="flex flex-1 gap-1">
+                                    <input
+                                        className="border p-1 w-35"
+                                        maxLength={10}
+                                        value={editData.name}
+                                        onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                                        placeholder="max 10 letters"
+                                    />
+                                    <input
+                                        className="border p-1 w-46"
+                                        maxLength={30}
+                                        value={editData.email}
+                                        onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                                    />
+                                    <Button
+                                        variant="green"
+                                        onClick={() => EditUser(user.id!)}
+                                    >
+                                        Save
+                                    </Button>
+                                    <Button
+                                        variant="red"
+                                        onClick={() => setEditingId(null)}
+                                    >
+                                        Back
+                                    </Button>
+                                </div>
+                            ) : (
+                                <>
+                                    <p className="text-xl font-semibold flex-1 text-left">{user.name}</p>
+                                    <p className="text-xl text-black flex-1 text-center">{user.email}</p>
+                                    <div className="flex items-center gap-1 justify-end flex-1">
+                                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">#{user.id}</span>
+                                        <Button
+                                            type="button"
+                                            variant="yellow"
+                                            onClick={() => {
+                                                setEditingId(user.id!);
+                                                setEditData({ name: user.name, email: user.email });
+                                            }}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="red"
+                                            onClick={() => DeleteUser(user.id!)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     ))}
                 </div>
