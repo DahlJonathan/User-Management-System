@@ -15,6 +15,7 @@ export default function MainPage() {
     }, [])
 
     const fetchUsers = async (mode: string = "All", text: string = "") => {
+        setMessage("");
         let url = ""
 
         if (mode === "All") {
@@ -46,8 +47,8 @@ export default function MainPage() {
 
     return (
         <div>
-            <SearchPanel onFetch={fetchUsers} />
-            <SearchResult message={message} search={search} users={users} />
+            <SearchPanel onFetch={fetchUsers} setMessage={setMessage} />
+            <SearchResult message={message} search={search} users={users} setUsers={setUsers} setMessage={setMessage} />
         </div>
     );
 }

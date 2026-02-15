@@ -1,4 +1,4 @@
-package get
+package api
 
 import (
 	"encoding/json"
@@ -33,18 +33,18 @@ func HandleGetUsers(w http.ResponseWriter, r *http.Request) {
 
 	name := r.URL.Query().Get("name")
 	if name != "" {
-		users, err := database.GetUserName(name) // Nyt palauttaa []User
+		users, err := database.GetUserName(name) 
 		if err != nil {
 			if err.Error() == "no_user_found" {
 				w.WriteHeader(http.StatusNotFound)
-				json.NewEncoder(w).Encode(map[string]string{"message": "Käyttäjiä ei löytynyt tällä nimellä"})
+				json.NewEncoder(w).Encode(map[string]string{"message": "No users found"})
 				return
 			}
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(users) // Lähettää listan
+		json.NewEncoder(w).Encode(users) 
 		return
 	}
 

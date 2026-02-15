@@ -71,6 +71,22 @@ func GetUserId(id string) (User, error) {
 	return u, nil
 }
 
+func DeleteUserByID(id string) error {
+	// Using Exec becouse delete is not outputting anything
+	result, err := DB.Exec("DELETE FROM users WHERE id = ?", id)
+	if err != nil {
+		return err
+	}
+
+	// Checking if it deleted
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
+		return fmt.Errorf("no_user_found")
+	}
+
+	return nil
+}
+
 func GetUserName(name string) ([]User, error) {
 
 	rows, err := DB.Query("SELECT id, name, email FROM users WHERE name LIKE ?", "%"+name+"%")

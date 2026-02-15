@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
-	get "user-management-backend/api"
+	api "user-management-backend/api"
 	"user-management-backend/cors"
 	"user-management-backend/database"
 )
@@ -14,7 +14,9 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handleRoot)
-	mux.HandleFunc("/users", get.HandleGetUsers)
+	mux.HandleFunc("/users", api.HandleGetUsers)
+
+	mux.HandleFunc("DELETE /users/{id}", api.HandleDeleteUser)
 
 	c := cors.SetupCors()
 	handler := c.Handler(mux)

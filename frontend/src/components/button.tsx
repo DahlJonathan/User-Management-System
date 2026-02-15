@@ -4,7 +4,7 @@ interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
 
 const Button = ({ children, onClick, variant = "blue", className = "", ...props }: ButtonProps) => {
 
-    const baseStyle = "px-6 py-2 font-medium transition-all duration-200 active:scale-95";
+    const baseStyle = "px-2 py-2 font-medium transition-all duration-200 active:scale-95";
 
     const variants = {
         blue: "bg-blue-600 text-white hover:bg-blue-700 shadow-md rounded-lg",

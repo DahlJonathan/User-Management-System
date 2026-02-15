@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import Button from './button.tsx'
+import Button from './button.tsx';
 
 interface SearchPanelProps {
     onFetch: (mode: Search, text: string) => void;
+    setMessage: (text: string) => void;
 }
 
 type Search = "All" | "Name" | "Id";
 
-const SearchPanel = ({ onFetch }: SearchPanelProps) => {
+const SearchPanel = ({ onFetch, setMessage }: SearchPanelProps) => {
     const [searchText, setSearchText] = useState("");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [mode, setMode] = useState<Search>("All");
@@ -19,8 +20,22 @@ const SearchPanel = ({ onFetch }: SearchPanelProps) => {
 
     const handleSearch = async (e: React.SyntheticEvent) => {
         e.preventDefault();
+        setMessage("");
+        if (searchText === "" && mode !== "All") {
+            setMessage("Search field cannot be empty")
+            return
+        }
+        if (mode === "Id") {
+            const isOnlyNumbers = /^\d+$/.test(searchText);
+
+            if (!isOnlyNumbers || parseInt(searchText) <= 0) {
+                setMessage("Please enter a positive ID number");
+                return;
+            }
+        }
 
         onFetch(mode, searchText)
+        setMessage("");
     }
 
     const placeholders: Record<string, string> = {
@@ -37,7 +52,7 @@ const SearchPanel = ({ onFetch }: SearchPanelProps) => {
                     variant="blue"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                    Search {mode}
+                    Search {mode} {dropdownOpen ? '↑' : '↓'}
                 </Button>
                 {dropdownOpen && (
                     <div className="absolute left-0 mt-2 w-30 bg-white border rounded shadow z-10">
