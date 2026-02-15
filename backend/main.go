@@ -20,6 +20,8 @@ func main() {
 
 	mux.HandleFunc("PUT /users/{id}", api.HandleEditUser)
 
+	mux.HandleFunc("POST /users", api.HandleAddUser)
+
 	c := cors.SetupCors()
 	handler := c.Handler(mux)
 

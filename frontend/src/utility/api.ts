@@ -9,7 +9,7 @@ export const FetchData = async <T>(url: string, config?: AxiosRequestConfig): Pr
     try {
         const response = await apiClient.request<T>({
             url,
-            method: 'GET',
+            method: config?.method || 'GET',
             ...config
         });
         return response.data;

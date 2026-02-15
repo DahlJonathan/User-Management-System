@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 
+	models "user-management-backend/types"
+
 	_ "modernc.org/sqlite"
-	"user-management-backend/types"
 )
 
 var DB *sql.DB
@@ -109,6 +110,15 @@ func DeleteUserByID(id string) error {
 }
 
 func EditUser(id string, name string, email string) error {
-	_, err := DB.Exec("UPDATE users SET name = ?, email = ? WHERE id = ?,", name, email, id)
+	_, err := DB.Exec("UPDATE users SET name = ?, email = ? WHERE id = ?", name, email, id)
 	return err
+}
+
+func AddUser(name string, email string) (int64, error) {
+	result, err := DB.Exec("INSERT INTO users (name, email) VALUES (?, ?)", name, email)
+	if err != nil {
+		return 0, err
+	}
+
+	return result.LastInsertId()
 }

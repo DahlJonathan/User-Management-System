@@ -47,7 +47,7 @@ export default function MainPage() {
 
     return (
         <div>
-            <SearchPanel onFetch={fetchUsers} setMessage={setMessage} />
+            <SearchPanel onFetch={fetchUsers} setMessage={setMessage} setUsers={setUsers} />
             <SearchResult message={message} search={search} users={users} setUsers={setUsers} setMessage={setMessage} />
         </div>
     );

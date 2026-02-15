@@ -2,6 +2,7 @@ import type { User } from '../types/user.ts';
 import Button from './button.tsx';
 import { FetchData } from '../utility/api.ts';
 import { useState } from 'react';
+import InputRow from './input.tsx';
 
 interface ResultProps {
     users: User[];
@@ -12,7 +13,6 @@ interface ResultProps {
 }
 
 const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultProps) => {
-    // Pidetään kirjaa siitä, mitä ID:tä muokataan
     const [editingId, setEditingId] = useState<number | null>(null);
     const [editData, setEditData] = useState({ name: "", email: "" });
 
@@ -56,44 +56,20 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
                 </p>
             )}
 
-            {search && (
-                <div className="mt-5 w-full max-w-md">
+            {search && users && (
+                <div className="mt-5 w-full max-w-xl">
                     {users.map((user, index) => (
-                        <div
-                            key={user.id ?? index}
-                            className="flex items-center p-1 border mb-1 bg-white shadow-sm rounded gap-4"
-                        >
+                        <div key={user.id ?? index} className="flex items-center p-1 border mb-1 bg-white shadow-sm rounded gap-4">
                             {editingId === user.id ? (
-                                <div className="flex flex-1 gap-1">
-                                    <input
-                                        className="border p-1 w-35"
-                                        maxLength={10}
-                                        value={editData.name}
-                                        onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                                        placeholder="max 10 letters"
-                                    />
-                                    <input
-                                        className="border p-1 w-46"
-                                        maxLength={30}
-                                        value={editData.email}
-                                        onChange={(e) => setEditData({ ...editData, email: e.target.value })}
-                                    />
-                                    <Button
-                                        variant="green"
-                                        onClick={() => EditUser(user.id!)}
-                                    >
-                                        Save
-                                    </Button>
-                                    <Button
-                                        variant="red"
-                                        onClick={() => setEditingId(null)}
-                                    >
-                                        Back
-                                    </Button>
-                                </div>
+                                <InputRow
+                                    editData={editData}
+                                    setEditData={setEditData}
+                                    onSave={() => EditUser(user.id!)}
+                                    onCancel={() => setEditingId(null)}
+                                />
                             ) : (
                                 <>
-                                    <p className="text-xl font-semibold flex-1 text-left">{user.name}</p>
+                                    <p className="text-xl font-semibold flex-1 text-left pl-5">{user.name}</p>
                                     <p className="text-xl text-black flex-1 text-center">{user.email}</p>
                                     <div className="flex items-center gap-1 justify-end flex-1">
                                         <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">#{user.id}</span>
@@ -124,5 +100,6 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
         </div>
     );
 };
+
 
 export default SearchResult;
