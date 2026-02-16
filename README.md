@@ -1,73 +1,111 @@
-# React + TypeScript + Vite
+# User Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Technologies
 
-Currently, two official plugins are available:
+- **Frontend**: React + TypeScript + Vite
+- **Backend**: Golang
+- **Database**: SQLite
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The repository includes a `user.db` file to make testing the application easier. It contains pre-configured users.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/DahlJonathan/User-Management-System.git
+2. Navigate to the project folder:
+```
+cd user-management-system
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3. Install dependencies:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+cd frontend
+npm install
+cd ../backend
+go mod tidy
+```
+
+### Starting the Application
+
+The application requires two separate terminal windows:
+
+**Terminaali 1 - Backend:**
+```
+cd backend
+go run .
+```
+
+**Terminaali 2 - Frontend:**
+
+```
+cd frontend
+npm run dev
+```
+
+Backend starts at `http://localhost:8080` and frontend at `http://localhost:5173`.
+
+## Usage
+
+You can use the blue dropdown menu to select your search criteria:
+  - All users: The text field is disabled. Simply click "Search" to fetch everyone.
+  - By Name: Enter a partial or full name in the text field and click "Search".
+  - By ID: Enter a specific ID (number) and click "Search". Note: IDs must be positive integers.
+
+### Managing Users
+
+  - Add User: Click the yellow "Add User" button to open a form for the name and email.
+  - Edit User: Click the yellow "Edit" button next to a user to update their details in-line.
+
+## SQLite
+
+sovellus käyttää SQLite ja sisältää valmiina käyttäjiä testaamista varten.
+
+### SQLite Database
+
+The application uses SQLite and includes pre-populated data for testing.
+
+#### Accessing the Database
+Run the following command in your terminal:
+
+```
+cd backend
+sqlite3 user.db
+```
+This opens the SQLite prompt: sqlite>
+
+### Useful Commands
+
+Show all tables:
+```
+.tables
+```
+
+Show table structure:
+```
+.schema "table_name"  
+```
+
+Show all rows:
+```
+SELECT * FROM table_name;
+```
+
+Fetch specific data:
+```
+SELECT name FROM users;
+```
+
+Search by name:
+```
+sqlite> SELECT * FROM users WHERE name = 'Otto';
+```
+
+quit
+```
+.quit
+```
+
