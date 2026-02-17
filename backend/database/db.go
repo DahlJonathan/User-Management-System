@@ -76,7 +76,7 @@ func GetUserId(id string) (models.User, error) {
 }
 
 func GetUserName(name string) ([]models.User, error) {
-
+	// gets all user that have character in name 
 	rows, err := DB.Query("SELECT id, name, email FROM users WHERE name LIKE ?", "%"+name+"%")
 	if err != nil {
 		return nil, err
@@ -102,7 +102,7 @@ func GetUserName(name string) ([]models.User, error) {
 }
 
 func DeleteUserByID(id string) error {
-	// Using Exec becouse delete is not outputting anything
+	// deleting user from users table
 	result, err := DB.Exec("DELETE FROM users WHERE id = ?", id)
 	if err != nil {
 		return err
@@ -122,6 +122,7 @@ func EditUser(id string, name string, email string) error {
 }
 
 func AddUser(name string, email string) (int64, error) {
+	// adding user to users table
 	result, err := DB.Exec("INSERT INTO users (name, email) VALUES (?, ?)", name, email)
 	if err != nil {
 		return 0, err

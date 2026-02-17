@@ -6,6 +6,7 @@ import (
 	api "user-management-backend/api"
 	"user-management-backend/cors"
 	"user-management-backend/database"
+	auth "user-management-backend/middleware"
 )
 
 func main() {
@@ -14,13 +15,13 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handleRoot)
-	mux.HandleFunc("/users", api.HandleGetUsers)
+	mux.HandleFunc("/users", auth.Middleware(api.HandleGetUsers))
 
-	mux.HandleFunc("DELETE /users/{id}", api.HandleDeleteUser)
+	mux.HandleFunc("DELETE /users/{id}", auth.Middleware(api.HandleDeleteUser))
 
-	mux.HandleFunc("PUT /users/{id}", api.HandleEditUser)
+	mux.HandleFunc("PUT /users/{id}", auth.Middleware(api.HandleEditUser))
 
-	mux.HandleFunc("POST /users", api.HandleAddUser)
+	mux.HandleFunc("POST /users", auth.Middleware(api.HandleAddUser))
 	mux.HandleFunc("POST /login", api.HandleLogin)
 
 	c := cors.SetupCors()
@@ -31,5 +32,6 @@ func main() {
 }
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
+	// health check
 	fmt.Fprintf(w, "Backend is running")
 }

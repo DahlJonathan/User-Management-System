@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import SearchPanel from '../components/searchpanel.tsx';
-import { FetchData } from '../utility/api.ts'
+import { FetchData } from '../utility/api.ts';
 import type { User } from '../types/user.ts';
-import SearchResult from "../components/searchresult.tsx"
+import SearchResult from '../components/searchresult.tsx';
+import LogoutButton from '../components/logout.tsx';
 
 
 export default function MainPage() {
@@ -49,6 +50,7 @@ export default function MainPage() {
         <div>
             <SearchPanel onFetch={fetchUsers} setMessage={setMessage} setUsers={setUsers} />
             <SearchResult message={message} search={search} users={users} setUsers={setUsers} setMessage={setMessage} />
+            <LogoutButton />
         </div>
     );
 }

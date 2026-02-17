@@ -8,6 +8,7 @@ func SetupCors() *cors.Cors {
 	return cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:5173"},
 		AllowCredentials: true,
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Authorization", "Content-Type"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 	})
 }

@@ -23,6 +23,8 @@ export default function Login() {
                 }),
             });
             if (response.status === "OK") {
+                // saving token and navigating to mainpage
+                localStorage.setItem("token", response.token);
                 navigate('/main')
             } else {
                 setError("Login Failed");
