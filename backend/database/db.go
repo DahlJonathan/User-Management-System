@@ -28,7 +28,14 @@ func CreateTable() {
 	name TEXT NOT NULL,
 	email TEXT NOT NULL
 	);
+
+	CREATE TABLE IF NOT EXISTS admins (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name TEXT NOT NULL,
+	password TEXT NOT NULL
+	);
 	`
+
 	_, err := DB.Exec(query)
 	if err != nil {
 		log.Fatal(err)
