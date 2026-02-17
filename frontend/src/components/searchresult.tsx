@@ -41,7 +41,7 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
                 )
             );
             setEditingId(null);
-            setMessage("Käyttäjä päivitetty onnistuneesti!");
+            setMessage("User updated successfully!");
         } catch (err: any) {
             console.error(err.message);
             setMessage(err.message);

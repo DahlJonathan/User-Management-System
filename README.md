@@ -48,6 +48,13 @@ npm run dev
 
 Backend starts at `http://localhost:8080` and frontend at `http://localhost:5173`.
 
+## Login
+
+There are only one admin user
+
+username: admin   
+password: admin
+
 ## Usage
 
 You can use the blue dropdown menu to select your search criteria:
