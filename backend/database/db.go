@@ -32,7 +32,8 @@ func CreateTable() {
 	CREATE TABLE IF NOT EXISTS admins (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT NOT NULL,
-	password TEXT NOT NULL
+	password TEXT NOT NULL,
+	rights TEXT NOT NULL
 	);
 	`
 
@@ -76,7 +77,7 @@ func GetUserId(id string) (models.User, error) {
 }
 
 func GetUserName(name string) ([]models.User, error) {
-	// gets all user that have character in name 
+	// gets all user that have character in name
 	rows, err := DB.Query("SELECT id, name, email FROM users WHERE name LIKE ?", "%"+name+"%")
 	if err != nil {
 		return nil, err
@@ -124,6 +125,35 @@ func EditUser(id string, name string, email string) error {
 func AddUser(name string, email string) (int64, error) {
 	// adding user to users table
 	result, err := DB.Exec("INSERT INTO users (name, email) VALUES (?, ?)", name, email)
+	if err != nil {
+		return 0, err
+	}
+
+	return result.LastInsertId()
+}
+
+func GetAdmins() ([]models.Admins, error) {
+
+	rows, err := DB.Query("SELECT id, name, rights FROM admins")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []models.Admins
+	for rows.Next() {
+		var u models.Admins
+		if err := rows.Scan(&u.ID, &u.Name, &u.Rights); err != nil {
+			return nil, err
+		}
+		users = append(users, u)
+	}
+	return users, nil
+}
+
+func AddAdmin(name string, rights string, password string) (int64, error) {
+	// adding admin to admins table
+	result, err := DB.Exec("INSERT INTO admins (name, rights, password) VALUES (?, ?, ?)", name, rights, password)
 	if err != nil {
 		return 0, err
 	}

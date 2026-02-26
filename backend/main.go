@@ -15,14 +15,17 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handleRoot)
-	mux.HandleFunc("/users", auth.Middleware(api.HandleGetUsers))
+	mux.HandleFunc("/users", auth.Middleware("Read", "Full")(api.HandleGetUsers))
 
-	mux.HandleFunc("DELETE /users/{id}", auth.Middleware(api.HandleDeleteUser))
+	mux.HandleFunc("DELETE /users/{id}", auth.Middleware("Full")(api.HandleDeleteUser))
 
-	mux.HandleFunc("PUT /users/{id}", auth.Middleware(api.HandleEditUser))
+	mux.HandleFunc("PUT /users/{id}", auth.Middleware("Full")(api.HandleEditUser))
 
-	mux.HandleFunc("POST /users", auth.Middleware(api.HandleAddUser))
+	mux.HandleFunc("POST /users", auth.Middleware("Full")(api.HandleAddUser))
 	mux.HandleFunc("POST /login", api.HandleLogin)
+
+	mux.HandleFunc("/admins", auth.Middleware("Full")(api.HandleGetAdmins))
+	mux.HandleFunc("POST /admins", auth.Middleware("Full")(api.HandleAddAdmin))
 
 	c := cors.SetupCors()
 	handler := c.Handler(mux)

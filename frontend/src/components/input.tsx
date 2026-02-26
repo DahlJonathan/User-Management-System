@@ -1,34 +1,55 @@
-import Button from './button.tsx';
-interface inputRow {
-    editData: { name: string, email: string };
-    setEditData: (data: { name: string, email: string }) => void;
+import Button from './button.tsx'
+
+interface Props<T extends Record<string, string>> {
+    editData: T
+    setEditData: (data: T) => void
     onSave: () => void
     onCancel: () => void
+    fields: {
+        name: keyof T
+        type?: string
+        maxLength?: number
+        placeholder?: string
+    }[]
 }
-const inputRow = ({ editData, setEditData, onSave, onCancel }: inputRow) => {
+
+function InputRow<T extends Record<string, string>>({
+    editData,
+    setEditData,
+    onSave,
+    onCancel,
+    fields
+}: Props<T>) {
     return (
         <div className="flex flex-1 items-center gap-2 w-full">
-            <input
-                className="border rounded p-1 flex-1 min-w-0"
-                maxLength={10}
-                value={editData.name}
-                onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                placeholder="Name (max 10)"
-            />
-            <input
-                type="email"
-                className="border rounded p-1 flex-1 min-w-0"
-                maxLength={30}
-                value={editData.email}
-                onChange={(e) => setEditData({ ...editData, email: e.target.value })}
-                placeholder="Email address"
-            />
+            {fields.map((field) => (
+                <input
+                    key={String(field.name)}
+                    type={field.type || "text"}
+                    className="border rounded p-1 flex-1 min-w-0 "
+                    maxLength={field.maxLength}
+                    value={editData[field.name] || ""}
+                    placeholder={field.placeholder || String(field.name)}
+                    onChange={(e) =>
+                        setEditData({
+                            ...editData,
+                            [field.name]: e.target.value
+                        })
+                    }
+                />
+            ))}
+
             <div className="flex gap-1 flex-shrink-0">
-                <Button variant="green" onClick={onSave}>Save</Button>
-                <Button variant="red" onClick={onCancel}>Back</Button>
+                <Button variant="green" onClick={onSave}>
+                    Save
+                </Button>
+
+                <Button variant="red" onClick={onCancel}>
+                    Back
+                </Button>
             </div>
         </div>
     )
 }
 
-export default inputRow;
+export default InputRow

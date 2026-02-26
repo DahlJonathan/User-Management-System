@@ -3,6 +3,7 @@ import Button from './button.tsx';
 import InputRow from './input.tsx';
 import { FetchData } from '../utility/api.ts';
 import type { User } from '../types/user.ts';
+import AdminDashboardButton from '../components/admindashboardbutton.tsx';
 
 interface SearchPanelProps {
     onFetch: (mode: Search, text: string) => void;
@@ -18,6 +19,7 @@ const SearchPanel = ({ onFetch, setMessage, setUsers }: SearchPanelProps) => {
     const [mode, setMode] = useState<Search>("All");
     const [addUser, setAddUser] = useState({ name: "", email: "" });
     const [addingUser, setAddingUser] = useState(false);
+    const rights = localStorage.getItem("rights");
 
     const selectedSearch = (value: Search) => {
         setMode(value);
@@ -69,7 +71,6 @@ const SearchPanel = ({ onFetch, setMessage, setUsers }: SearchPanelProps) => {
             setAddUser({ name: "", email: "" });
             setAddingUser(false);
         } catch (err: any) {
-            console.error(err.message);
             setMessage(err.message);
         }
     }
@@ -83,6 +84,8 @@ const SearchPanel = ({ onFetch, setMessage, setUsers }: SearchPanelProps) => {
     return (
         <div className="flex flex-col items-center justify-center gap-4">
             <form onSubmit={handleSearch} className="flex flex-row items-center justify-center gap-1">
+                <AdminDashboardButton />
+
                 <div className="relative">
                     <Button
                         type="button"
@@ -121,6 +124,7 @@ const SearchPanel = ({ onFetch, setMessage, setUsers }: SearchPanelProps) => {
                     )}
                 </div>
 
+
                 <input
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
@@ -140,6 +144,7 @@ const SearchPanel = ({ onFetch, setMessage, setUsers }: SearchPanelProps) => {
                     type="button"
                     variant="yellow"
                     onClick={() => setAddingUser(true)}
+                    disabled={rights !== "Full"}
                 >
                     Add User
                 </Button>
@@ -151,6 +156,18 @@ const SearchPanel = ({ onFetch, setMessage, setUsers }: SearchPanelProps) => {
                         setEditData={setAddUser}
                         onSave={() => (AddUser())}
                         onCancel={() => setAddingUser(false)}
+                        fields={[
+                            {
+                                name: "name",
+                                maxLength: 10,
+                                placeholder: "Name"
+                            },
+                            {
+                                name: "email",
+                                type: "email",
+                                placeholder: "Email"
+                            }
+                        ]}
                     />
                 </div>
             )}

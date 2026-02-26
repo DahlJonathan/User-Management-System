@@ -6,6 +6,7 @@ import SearchResult from '../components/searchresult.tsx';
 import LogoutButton from '../components/logout.tsx';
 
 
+
 export default function MainPage() {
     const [message, setMessage] = useState<string>();
     const [users, setUsers] = useState<User[]>([]);

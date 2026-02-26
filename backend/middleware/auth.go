@@ -11,29 +11,47 @@ import (
 // var jwtKey = []byte(os.Getenv("SECRET_KEY"))
 var jwtKey = []byte("SECRET_KEY")
 
-func Middleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		// get token from Authorization header
-		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			http.Error(w, "Authorization header missing", http.StatusUnauthorized)
-			return
+func Middleware(allowedRoles ...string) func(http.HandlerFunc) http.HandlerFunc {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+
+			authHeader := r.Header.Get("Authorization")
+			if authHeader == "" {
+				http.Error(w, "Missing token", http.StatusUnauthorized)
+				return
+			}
+
+			tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+			token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+				return jwtKey, nil
+			})
+
+			if err != nil || !token.Valid {
+				http.Error(w, "Invalid token", http.StatusUnauthorized)
+				return
+			}
+
+			claims, ok := token.Claims.(jwt.MapClaims)
+			if !ok {
+				http.Error(w, "Invalid claims", http.StatusUnauthorized)
+				return
+			}
+
+			rights, ok := claims["rights"].(string)
+			if !ok {
+				http.Error(w, "No rights in token", http.StatusForbidden)
+				return
+			}
+
+			for _, role := range allowedRoles {
+				if rights == role {
+					next(w, r)
+					return
+				}
+			}
+
+			http.Error(w, "Forbidden", http.StatusForbidden)
 		}
-
-		// removes bearer so we get only token part
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-
-		// parsing and validating token
-		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			return jwtKey, nil
-		})
-
-		if err != nil || !token.Valid {
-			http.Error(w, "Invalid or expired token", http.StatusUnauthorized)
-			return
-		}
-
-		// if everything is ok, continue
-		next(w, r)
 	}
 }

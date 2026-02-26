@@ -15,6 +15,7 @@ interface ResultProps {
 const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultProps) => {
     const [editingId, setEditingId] = useState<number | null>(null);
     const [editData, setEditData] = useState({ name: "", email: "" });
+    const rights = localStorage.getItem("rights");
 
     const DeleteUser = async (id: number) => {
         setMessage("");
@@ -66,6 +67,18 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
                                     setEditData={setEditData}
                                     onSave={() => EditUser(user.id!)}
                                     onCancel={() => setEditingId(null)}
+                                    fields={[
+                                        {
+                                            name: "name",
+                                            maxLength: 10,
+                                            placeholder: "Name"
+                                        },
+                                        {
+                                            name: "email",
+                                            type: "email",
+                                            placeholder: "Email"
+                                        }
+                                    ]}
                                 />
                             ) : (
                                 <>
@@ -76,6 +89,7 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
                                         <Button
                                             type="button"
                                             variant="yellow"
+                                            disabled={rights !== "Full"}
                                             onClick={() => {
                                                 setEditingId(user.id!);
                                                 setEditData({ name: user.name, email: user.email });
@@ -87,6 +101,7 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
                                             type="button"
                                             variant="red"
                                             onClick={() => DeleteUser(user.id!)}
+                                            disabled={rights !== "Full"}
                                         >
                                             Delete
                                         </Button>

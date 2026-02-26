@@ -2,6 +2,7 @@ import bgImage from './assets/banner.jpg';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './auth/login.tsx';
 import MainPage from './pages/mainpage.tsx';
+import AdminDashboard from './pages/adminsettings.tsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       </div>
       <Router>
         <Routes>
+          <Route path="/admindashboard" element={<AdminDashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/" element={<Login />} />
