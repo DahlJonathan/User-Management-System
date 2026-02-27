@@ -26,6 +26,7 @@ func main() {
 
 	mux.HandleFunc("/admins", auth.Middleware("Full")(api.HandleGetAdmins))
 	mux.HandleFunc("POST /admins", auth.Middleware("Full")(api.HandleAddAdmin))
+	mux.HandleFunc("DELETE /admins/{id}", auth.Middleware("Full")(api.HandleDeleteAdmin))
 
 	c := cors.SetupCors()
 	handler := c.Handler(mux)

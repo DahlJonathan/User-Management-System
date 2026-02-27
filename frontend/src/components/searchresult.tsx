@@ -24,7 +24,6 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
             setUsers((prev) => prev.filter((u) => u.id !== id));
             setMessage("Käyttäjä poistettu");
         } catch (err: any) {
-            console.error(err.message);
             setMessage(err.message);
         }
     }

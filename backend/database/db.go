@@ -160,3 +160,18 @@ func AddAdmin(name string, rights string, password string) (int64, error) {
 
 	return result.LastInsertId()
 }
+
+func DeleteAdminByID(id string) error {
+	// deleting user from users table
+	result, err := DB.Exec("DELETE FROM admins WHERE id = ?", id)
+	if err != nil {
+		return err
+	}
+
+	// Checking if its deleted
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
+		return fmt.Errorf("no_user_found")
+	}
+	return nil
+}

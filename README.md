@@ -52,7 +52,7 @@ Backend starts at `http://localhost:8080` and frontend at `http://localhost:5173
 
 | Role | Description | Username | Password |
 | :--- | :--- | :--- | :--- |
-| **Admin (Full)** | Full read and write access to all settings. | `adminFull` | `adminfull` |
+| **Admin (Full)** | Full read and write access to all settings. | `admin` | `admin` |
 | **Admin (Read)** | View-only access. Cannot edit or delete. | `adminRead` | `adminread` |
 
 ## Usage

@@ -32,6 +32,18 @@ function AdminDashboard() {
         navigate('/main');
     }
 
+    const DeleteAdmin = async (id: number) => {
+        setMessage("");
+        try {
+            await FetchData<Admin>(`/admins/${id}`, { method: 'DELETE' });
+            setAdmin((prev) => prev.filter((u) => u.id !== id));
+            setMessage("admin poistettu");
+        } catch (err: any) {
+            console.error(err.message);
+            setMessage(err.message);
+        }
+    }
+
     const SaveAdmin = async () => {
 
         if (!addAdmin.name.trim()) {
@@ -126,6 +138,13 @@ function AdminDashboard() {
                             #{user.id}
                         </span>
                     </div>
+                    <Button
+                        type="button"
+                        variant="red"
+                        onClick={() => DeleteAdmin(user.id!)}
+                    >
+                        Delete
+                    </Button>
                 </div>
             ))}
             <div className="mt-5">
