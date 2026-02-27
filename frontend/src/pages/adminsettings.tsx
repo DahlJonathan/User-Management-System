@@ -30,6 +30,7 @@ function AdminDashboard() {
 
     const back = () => {
         navigate('/main');
+        setMessage("");
     }
 
     const DeleteAdmin = async (id: number) => {
@@ -45,7 +46,7 @@ function AdminDashboard() {
     }
 
     const SaveAdmin = async () => {
-
+        setMessage("");
         if (!addAdmin.name.trim()) {
             setMessage("Name is required");
             return;
@@ -85,40 +86,6 @@ function AdminDashboard() {
             <div className="text-4xl font-bold mb-5">
                 Edit Admins
             </div>
-            <Button
-                type="button"
-                variant="yellow"
-                onClick={() => setAddingAdmin(true)}
-            >
-                Add Admin
-            </Button>
-            {addingAdmin && (
-                <div className="mb-2 mt-5 p-2 border rounded bg-gray-50 shadow-sm">
-                    <InputRow
-                        editData={addAdmin}
-                        setEditData={setAddAdmin}
-                        onSave={() => (SaveAdmin())}
-                        onCancel={() => setAddingAdmin(false)}
-                        fields={[
-                            {
-                                name: "name",
-                                maxLength: 15,
-                                placeholder: "Name"
-                            },
-                            {
-                                name: "rights",
-                                type: "rights",
-                                placeholder: "rights (Full or Read only)"
-                            },
-                            {
-                                name: "password",
-                                type: "password",
-                                placeholder: "password"
-                            }
-                        ]}
-                    />
-                </div>
-            )}
             <div className="text-2xl font-bold mb-3">
                 {message}
             </div>
@@ -155,7 +122,7 @@ function AdminDashboard() {
                     </Button>
                 </div>
             ))}
-            <div className="mt-5">
+            <div className="mt-5 flex gap-2">
                 <Button
                     variant="red"
                     type="button"
@@ -163,7 +130,41 @@ function AdminDashboard() {
                 >
                     Back
                 </Button>
+                <Button
+                    type="button"
+                    variant="yellow"
+                    onClick={() => setAddingAdmin(true)}
+                >
+                    Add Admin
+                </Button>
             </div>
+            {addingAdmin && (
+                <div className="mb-2 mt-5 p-2 border rounded bg-gray-50 shadow-sm">
+                    <InputRow
+                        editData={addAdmin}
+                        setEditData={setAddAdmin}
+                        onSave={() => (SaveAdmin())}
+                        onCancel={() => setAddingAdmin(false)}
+                        fields={[
+                            {
+                                name: "name",
+                                maxLength: 15,
+                                placeholder: "Name"
+                            },
+                            {
+                                name: "rights",
+                                type: "rights",
+                                placeholder: "rights (Full or Read only)"
+                            },
+                            {
+                                name: "password",
+                                type: "password",
+                                placeholder: "password"
+                            }
+                        ]}
+                    />
+                </div>
+            )}
         </div>
     );
 
