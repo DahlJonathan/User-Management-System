@@ -70,7 +70,7 @@ You can use the blue dropdown menu to select your search criteria:
 
 ### Admin Management `(Under Development 🛠️)`
 
-1. Log in with the **`adminFull`** account.
+1. Log in with the **`admin`** account.
 2. Navigate to the **Settings** gear.
 3. Click on the **"Add Admin"** button.
 4. Fill in the username, role (Full or Read), and set a password
