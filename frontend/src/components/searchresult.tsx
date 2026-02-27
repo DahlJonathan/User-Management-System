@@ -56,8 +56,17 @@ const SearchResult = ({ users, search, message, setMessage, setUsers }: ResultPr
                 </p>
             )}
 
+            <div className="w-full max-w-xl mt-5">
+                <div className="flex items-center gap-4 px-1 text-sm font-bold text-gray-500 uppercase tracking-wider">
+                    <p className="flex-1 pl-5 text-left">Name</p>
+                    <p className="flex-1 pl-10 text-center">Email</p>
+                    <div className="w-24 text-right pr-2">ID</div>
+                    <div className="w-[100px]"></div>
+                </div>
+            </div>
+
             {search && users && (
-                <div className="mt-5 w-full max-w-xl">
+                <div className=" w-full max-w-xl">
                     {users.map((user, index) => (
                         <div key={user.id ?? index} className="flex items-center p-1 border mb-1 bg-white shadow-sm rounded gap-4">
                             {editingId === user.id ? (

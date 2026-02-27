@@ -93,7 +93,7 @@ function AdminDashboard() {
                 Add Admin
             </Button>
             {addingAdmin && (
-                <div className="mt-2 mb-2 p-4 border rounded bg-gray-50 shadow-sm">
+                <div className="mb-2 mt-5 p-2 border rounded bg-gray-50 shadow-sm">
                     <InputRow
                         editData={addAdmin}
                         setEditData={setAddAdmin}
@@ -122,10 +122,18 @@ function AdminDashboard() {
             <div className="text-2xl font-bold mb-3">
                 {message}
             </div>
+            <div className="w-120 mt-2">
+                <div className="flex items-center gap-4 px-1 text-sm font-bold text-gray-500 uppercase tracking-wider">
+                    <p className="flex-1 pl-5 text-left">Name</p>
+                    <p className="flex-1 pl-10 text-center">Role</p>
+                    <div className="w-24 text-right pr-2">ID</div>
+                    <div className="w-[72px]"></div>
+                </div>
+            </div>
             {admin.map((user, index) => (
                 <div
                     key={user.id ?? index}
-                    className="flex items-center h-12 p-1 border mb-1 bg-white shadow-sm rounded gap-4 w-100"
+                    className="flex items-center h-12 p-1 border mb-1 bg-white shadow-sm rounded gap-4 w-120"
                 >
                     <p className="text-xl font-semibold flex-1 text-left pl-5 truncate">
                         {user.name}
